@@ -1,18 +1,43 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| list -> get shopping list
+| additem -> add item to list
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::get('/list/{list_id}', function ($list_id) {
+
+    $list = DB::select('SELECT * FROM `lists` WHERE `list_id` = ?', [$list_id]);
+
+    return response()->json($list);
+});
+
+Route::post('/additem', function (Request $request) {
+    $list_id = $request->input('list_id');
+    $item = $request->input('item');
+
+    if ($list_id) {
+        $query = 'INSERT INTO `lists` (`list_id`, `item`) VALUES (?, ?)';
+        try {
+            DB::insert($query, [$list_id, $item]);
+            $status = 'success';
+        } catch (Exception $e) {
+            $status = 'error';
+        }
+    } else {
+        $status = 'error';
+    }
+
+    return response()->json([
+        'status' => $status
+    ]);
 });
