@@ -41,3 +41,22 @@ Route::post('/additem', function (Request $request) {
         'status' => $status
     ]);
 });
+
+Route::delete('/deleteitem', function (Request $request) {
+    $id = $request->input('id');
+    if ($id) {
+        $query = 'DELETE FROM `lists` WHERE `id` = ?';
+        try {
+            DB::delete($query, [$id]);
+            $status = 'success';
+        } catch (Exception $e) {
+            $status = 'error';
+        }
+    } else {
+        $status = 'error';
+    }
+
+    return response()->json([
+        'status' => $status
+    ]);
+});
