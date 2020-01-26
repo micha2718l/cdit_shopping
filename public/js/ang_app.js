@@ -4,6 +4,7 @@ angular
     this.status = {add: '', refresh: '', delete: '', update: ''};
     this.list = {};
     this.inputs = {list_id: 1, item: ""};
+    this.updateItem = {id: null, list_id: null, item: null, newItem: null};
 
     this.refreshList = function (list_id) {
         var self = this;
@@ -44,6 +45,31 @@ angular
             self.refreshList(1);
         }).catch(function (response) {
             self.status.delete = 'error';
+        });
+    };
+
+    this.setUpdateItem = function (item) {
+        this.updateItem.id = item.id;
+        this.updateItem.list_id = item.list_id;
+        this.updateItem.item = item.item;
+        this.updateItem.newItem = item.item;
+    };
+
+    this.update = function () {
+        var self = this;
+        $http({
+            method: 'put',
+            url: '/api/updateitem',
+            data: JSON.stringify({
+                id: self.updateItem.id,
+                newItem: self.updateItem.newItem
+            }),
+            headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+            self.status.update = response.data;
+            self.refreshList(1);
+        }).catch(function (response) {
+            self.status.update = 'error';
         });
     };
 
