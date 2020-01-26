@@ -1,12 +1,11 @@
 angular
 .module('listApp', [])
 .controller('listController', ['$http', function($http) {
-    this.value = 42;
+    this.status = {add: '', refresh: '', delete: '', update: ''};
     this.list = {};
     this.inputs = {list_id: 1, item: ""};
 
     this.refreshList = function (list_id) {
-        console.log('refreshing ' + list_id);
         var self = this;
         $http.get('/api/list/' + list_id)
         .then(function(response) {
@@ -14,8 +13,7 @@ angular
         });
     };
 
-    this.addItem = function() {
-        this.value = 23;
+    this.addItem = function () {
         var self = this;
         $http({
             method: 'post',
@@ -25,10 +23,30 @@ angular
             }),
             headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
-            self.value = response.data;
+            self.status.add = response.data;
+            self.refreshList(1);
         }).catch(function (response) {
-            self.value = 'error';
+            self.status.add = 'error';
         });
     }
+
+    this.delete = function (id) {
+        var self = this;
+        $http({
+            method: 'delete',
+            url: '/api/deleteitem',
+            data: JSON.stringify({
+                id: id
+            }),
+            headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+            self.status.delete = response.data;
+            self.refreshList(1);
+        }).catch(function (response) {
+            self.status.delete = 'error';
+        });
+    };
+
+    this.refreshList(1);
 
 }]);
