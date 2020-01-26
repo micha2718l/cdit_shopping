@@ -10,8 +10,19 @@
 
     <div ng-controller="listController as ctrl">
         {{ ctrl.value }}
-    </div>
+        <div ng-repeat="item in ctrl.list">
+            {{ item.list_id }} - {{ item.item }}
+        </div>
 
+        <form>
+            <input type="text" ng-model="ctrl.inputs.list_id" />
+            <input type="text" ng-model="ctrl.inputs.item" />
+
+            <button type="button" class="btn" ng-click="ctrl.addItem()">Add</button>
+            <button type="button" class="btn" ng-click="ctrl.refreshList(1)">Refresh</button>
+        </form>
+
+    </div>
     <script src="/js/ang_app.js"></script>
 
 </body>
