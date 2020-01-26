@@ -60,3 +60,24 @@ Route::delete('/deleteitem', function (Request $request) {
         'status' => $status
     ]);
 });
+
+Route::put('/updateitem', function (Request $request) {
+    $id = $request->input('id');
+    $newItem = $request->input('newItem');
+
+    if ($id) {
+        $query = 'UPDATE `lists` SET item = ? WHERE `id` = ?';
+        try {
+            DB::delete($query, [$newItem, $id]);
+            $status = 'success';
+        } catch (Exception $e) {
+            $status = 'error';
+        }
+    } else {
+        $status = 'error';
+    }
+
+    return response()->json([
+        'status' => $status
+    ]);
+});
