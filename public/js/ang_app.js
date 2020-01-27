@@ -2,15 +2,26 @@ angular
 .module('listApp', [])
 .controller('listController', ['$http', function($http) {
     this.status = {add: '', refresh: '', delete: '', update: ''};
-    this.list = {};
+    this.list = [];
     this.inputs = {list_id: 1, item: ""};
     this.updateItem = {id: null, list_id: null, item: null, newItem: null};
+    this.orderOptions = ['item', 'id', 'created', 'modified'];
+    this.currentOrder = {field: this.orderOptions[0], direction: false};
+    this.debug = false;
 
     this.refreshList = function (list_id) {
         var self = this;
         $http.get('/api/list/' + list_id)
         .then(function(response) {
-            self.list = response.data;//response.data;
+            self.list = response.data;
+            self.list.map(function (el) {
+                var t = el.created.split(/[- :]/);
+                el.created = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+                t = el.modified.split(/[- :]/);
+                el.modified = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+                return el;
+            });
+            console.log(self.list);
         });
     };
 
