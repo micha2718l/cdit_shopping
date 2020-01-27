@@ -24,11 +24,12 @@ Route::get('/list/{list_id}', function ($list_id) {
 Route::post('/additem', function (Request $request) {
     $list_id = $request->input('list_id');
     $item = $request->input('item');
+    $datetime = date('Y-m-d H:i:s');
 
     if ($list_id) {
-        $query = 'INSERT INTO `lists` (`list_id`, `item`) VALUES (?, ?)';
+        $query = 'INSERT INTO `lists` (`list_id`, `item`, `created`, `modified`) VALUES (?, ?, ?, ?)';
         try {
-            DB::insert($query, [$list_id, $item]);
+            DB::insert($query, [$list_id, $item, $datetime, $datetime]);
             $status = 'success';
         } catch (Exception $e) {
             $status = 'error';
@@ -64,11 +65,12 @@ Route::delete('/deleteitem', function (Request $request) {
 Route::put('/updateitem', function (Request $request) {
     $id = $request->input('id');
     $newItem = $request->input('newItem');
+    $datetime = date('Y-m-d H:i:s');
 
     if ($id) {
-        $query = 'UPDATE `lists` SET item = ? WHERE `id` = ?';
+        $query = 'UPDATE `lists` SET item = ?, modified = ? WHERE `id` = ?';
         try {
-            DB::delete($query, [$newItem, $id]);
+            DB::delete($query, [$newItem, $datetime, $id]);
             $status = 'success';
         } catch (Exception $e) {
             $status = 'error';
