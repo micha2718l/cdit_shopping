@@ -12,20 +12,31 @@
 <body ng-app="listApp">
 
     <div ng-controller="listController as ctrl">
-        {{ ctrl.status }} / {{ ctrl.updateItem }}
+        <div ng-show="ctrl.debug">
+            status: {{ ctrl.status }}<br />
+            updateItem: {{ ctrl.updateItem }}<br />
+            currentOrder: {{ ctrl.currentOrder }} <br />
+        </div>
+        <h1>
+            Super cool shopping list app.
+        </h1>
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
                     <th>List ID</th>
+                    <th>Created</th>
+                    <th>Modified</th>
                     <th>Item</th>
                     <th>Update?</th>
                     <th>Delete?</th>
                 </tr>
             </thead>
-            <tr ng-repeat="item in ctrl.list">
+            <tr ng-repeat="item in ctrl.list | orderBy : ctrl.currentOrder.field : ctrl.currentOrder.direction">
                 <td>{{ item.id }}</td>
                 <td>{{ item.list_id }}</td>
+                <td>{{ item.created }}</td>
+                <td>{{ item.modified }}</td>
                 <td>{{ item.item }}</td>
                 <td>
                     <button type="button" class="btn btn-primary" ng-click="ctrl.setUpdateItem(item)"
@@ -46,7 +57,13 @@
         <form>
             <button type="button" class="btn btn-primary" ng-click="ctrl.refreshList(1)">Refresh</button>
         </form>
-
+        <br />
+        Sort By:
+        <select ng-model="ctrl.currentOrder.field">
+            <option ng-repeat="option in ctrl.orderOptions" value="{{ option }}">{{ option }}</option>
+        </select>
+        <input type="checkbox" ng-model="ctrl.currentOrder.direction" />Reverse?
+        <br /><input type="checkbox" ng-model="ctrl.debug" />Debug Mode?
 
         <!-- Modal -->
         <div id="myModal" class="modal fade" role="dialog">
