@@ -64,7 +64,17 @@
         <select ng-model="ctrl.selectedList" ng-change="ctrl.setList()">
             <option ng-repeat="list in ctrl.lists" value="{{ list }}">{{ list.list_name }}</option>
         </select>
+        Delete current list:
+        <button type="button" class="btn btn-danger" ng-click="ctrl.deleteList()">Delete</button>
         <br /><br />
+        Add New List Name:
+        <input type="text" ng-model="ctrl.newList.list_name" />
+        Description:
+        <input type="text" ng-model="ctrl.newList.description" />
+        <button type="button" class="btn btn-primary"
+                ng-click="ctrl.addList(ctrl.newList.list_name, ctrl.newList.description)">
+        Add</button>
+        <br />
         Sort By:
         <select ng-model="ctrl.currentOrder.field">
             <option ng-repeat="option in ctrl.orderOptions" value="{{ option }}">{{ option }}</option>

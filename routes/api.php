@@ -20,6 +20,45 @@ Route::get('/lists', function () {
     return response()->json($lists);
 });
 
+Route::delete('/deletelist', function (Request $request) {
+    $list_id = $request->input('list_id');
+    if ($list_id) {
+        $query = 'DELETE FROM `lists` WHERE `list_id` = ?';
+        try {
+            DB::delete($query, [$list_id]);
+            $status = 'success';
+        } catch (Exception $e) {
+            $status = 'error';
+        }
+    } else {
+        $status = 'error';
+    }
+
+    return response()->json([
+        'status' => $status
+    ]);
+});
+
+Route::post('/addlist', function (Request $request) {
+    $list_name = $request->input('list_name');
+    $description = $request->input('description');
+    if ($list_name) {
+        $query = 'INSERT INTO `lists` (`list_name`, `description`) VALUES (?, ?)';
+        try {
+            DB::insert($query, [$list_name, $description]);
+            $status = 'success';
+        } catch (Exception $e) {
+            $status = $e;//'error';
+        }
+    } else {
+        $status = 'error';
+    }
+
+    return response()->json([
+        'status' => $status
+    ]);
+});
+
 Route::get('/list/{list_id}', function ($list_id) {
 
     $list = DB::select('SELECT * FROM `items` JOIN `lists` ON `items`.`list_id` = `lists`.`list_id` WHERE `items`.`list_id` = ?', [$list_id]);

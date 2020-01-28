@@ -9,8 +9,9 @@ angular
     this.currentOrder = {field: this.orderOptions[0], direction: false};
     this.debug = false;
     this.currentList = 0;
-    this.selectedList = {};
+    this.selectedList = '';
     this.lists = [];
+    this.newList = {list_name: '', description: ''};
 
     this.getLists = function () {
         var self = this;
@@ -48,6 +49,27 @@ angular
         });
     };
 
+    this.addList = function (list_name, description) {
+        console.log(list_name);
+        console.log(description);
+        var self = this;
+        $http({
+            method: 'post',
+            url: '/api/addlist',
+            data: JSON.stringify({
+                list_name: list_name,
+                description: description
+            }),
+            headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+            self.status.add = response.data;
+            alert('Success adding ' + list_name + ': ' + description);
+            window.location.reload();
+        }).catch(function (response) {
+            self.status.add = 'error';
+        });
+    }
+
     this.addItem = function () {
         var self = this;
         $http({
@@ -79,6 +101,24 @@ angular
             self.refreshList();
         }).catch(function (response) {
             self.status.delete = 'error';
+        });
+    };
+
+    this.deleteList = function () {
+        var self = this;
+        $http({
+            method: 'delete',
+            url: '/api/deletelist',
+            data: JSON.stringify({
+                list_id: JSON.parse(this.selectedList).list_id
+            }),
+            headers: {'Content-Type': 'application/json'}
+        }).then(function (response) {
+            self.status.delete = response.data;
+            alert('Success deleting ' + JSON.parse(self.selectedList).list_name + ': ' + JSON.parse(self.selectedList).description);
+            window.location.reload();
+        }).catch(function (response) {
+            self.status.delete = 'errorjs';
         });
     };
 
