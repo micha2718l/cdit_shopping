@@ -3,16 +3,40 @@ angular
 .controller('listController', ['$http', function($http) {
     this.status = {add: '', refresh: '', delete: '', update: ''};
     this.list = [];
-    this.inputs = {list_id: 1, item: ""};
+    this.inputItem = "";
     this.updateItem = {id: null, list_id: null, item: null, newItem: null};
     this.orderOptions = ['item', 'id', 'created', 'modified'];
     this.currentOrder = {field: this.orderOptions[0], direction: false};
     this.debug = false;
+    this.currentList = 0;
+    this.selectedList = {};
+    this.lists = [];
 
-    this.refreshList = function (list_id) {
+    this.getLists = function () {
         var self = this;
-        $http.get('/api/list/' + list_id)
+        $http.get('/api/lists/')
         .then(function(response) {
+            self.lists = response.data;
+            console.log(self.selectedList);
+            if (self.lists.length > 0) {
+                self.selectedList = JSON.stringify(self.lists[self.currentList]);
+                self.refreshList();
+            }
+        });
+    };
+
+    this.setList = function() {
+        var selectedListId = JSON.parse(this.selectedList).list_id;
+        this.currentList = this.lists.findIndex(function (el) {
+            return el.list_id == selectedListId});
+        this.refreshList();
+    };
+
+    this.refreshList = function () {
+        var self = this;
+        $http.get('/api/list/' + self.lists[self.currentList].list_id)
+        .then(function(response) {
+
             self.list = response.data;
             self.list.map(function (el) {
                 var t = el.created.split(/[- :]/);
@@ -21,7 +45,6 @@ angular
                 el.modified = new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
                 return el;
             });
-            console.log(self.list);
         });
     };
 
@@ -31,12 +54,12 @@ angular
             method: 'post',
             url: '/api/additem',
             data: JSON.stringify({
-                list_id: this.inputs.list_id, item: this.inputs.item
+                list_id: this.lists[this.currentList].list_id, item: this.inputItem
             }),
             headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
             self.status.add = response.data;
-            self.refreshList(1);
+            self.refreshList();
         }).catch(function (response) {
             self.status.add = 'error';
         });
@@ -53,7 +76,7 @@ angular
             headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
             self.status.delete = response.data;
-            self.refreshList(1);
+            self.refreshList();
         }).catch(function (response) {
             self.status.delete = 'error';
         });
@@ -78,12 +101,12 @@ angular
             headers: {'Content-Type': 'application/json'}
         }).then(function (response) {
             self.status.update = response.data;
-            self.refreshList(1);
+            self.refreshList();
         }).catch(function (response) {
             self.status.update = 'error';
         });
     };
 
-    this.refreshList(1);
+    this.getLists();
 
 }]);
