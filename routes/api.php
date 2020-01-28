@@ -48,7 +48,7 @@ Route::post('/addlist', function (Request $request) {
             DB::insert($query, [$list_name, $description]);
             $status = 'success';
         } catch (Exception $e) {
-            $status = $e;//'error';
+            $status = 'error';
         }
     } else {
         $status = 'error';
