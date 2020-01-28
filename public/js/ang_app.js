@@ -2,7 +2,6 @@ angular
 .module('listApp', [])
 .controller('listController', ['$http', function($http) {
     this.status = {add: '', refresh: '', delete: '', update: ''};
-    this.list = [];
     this.inputItem = "";
     this.updateItem = {id: null, list_id: null, item: null, newItem: null};
     this.orderOptions = ['item', 'id', 'created', 'modified'];
