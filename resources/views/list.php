@@ -16,6 +16,9 @@
             status: {{ ctrl.status }}<br />
             updateItem: {{ ctrl.updateItem }}<br />
             currentOrder: {{ ctrl.currentOrder }} <br />
+            lists: {{ ctrl.lists }} <br />
+            newList: {{ ctrl.newList }} <br />
+            selectedList: {{ ctrl.selectedList }} <br />
         </div>
         <h1>
             Super cool shopping list app.
