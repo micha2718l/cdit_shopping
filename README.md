@@ -2,6 +2,15 @@
 
 A shopping list app built using Laravel.
 
+# Tech used
+- Frameworks
+  - Laravel
+  - Angularjs
+  - Bootstrap
+- Server
+  - nginx
+  - Amazon EC2
+
 # SQL Schema
 ## Table: items
 - Columns:
