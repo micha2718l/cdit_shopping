@@ -20,6 +20,12 @@
         <h1>
             Super cool shopping list app.
         </h1>
+        <h2>
+            {{ ctrl.lists[ctrl.currentList].list_name }}
+        </h2>
+        <h3>
+            {{ ctrl.lists[ctrl.currentList].description }}
+        </h3>
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -48,16 +54,17 @@
             </tr>
         </table>
 
-        <form>
-            <input type="text" ng-model="ctrl.inputs.list_id" />
-            <input type="text" ng-model="ctrl.inputs.item" />
+        Item to add:<input type="text" ng-model="ctrl.inputItem" />
 
-            <button type="button" class="btn btn-primary" ng-click="ctrl.addItem()">Add</button>
-        </form>
-        <form>
-            <button type="button" class="btn btn-primary" ng-click="ctrl.refreshList(1)">Refresh</button>
-        </form>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.addItem()">Add</button>
         <br />
+        <button type="button" class="btn btn-primary" ng-click="ctrl.refreshList()">Refresh</button>
+        <br />
+        Select List to Work With:
+        <select ng-model="ctrl.selectedList" ng-change="ctrl.setList()">
+            <option ng-repeat="list in ctrl.lists" value="{{ list }}">{{ list.list_name }}</option>
+        </select>
+        <br /><br />
         Sort By:
         <select ng-model="ctrl.currentOrder.field">
             <option ng-repeat="option in ctrl.orderOptions" value="{{ option }}">{{ option }}</option>
