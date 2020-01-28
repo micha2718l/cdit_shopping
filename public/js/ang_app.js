@@ -18,7 +18,6 @@ angular
         $http.get('/api/lists/')
         .then(function(response) {
             self.lists = response.data;
-            console.log(self.selectedList);
             if (self.lists.length > 0) {
                 self.selectedList = JSON.stringify(self.lists[self.currentList]);
                 self.refreshList();
@@ -50,8 +49,6 @@ angular
     };
 
     this.addList = function (list_name, description) {
-        console.log(list_name);
-        console.log(description);
         var self = this;
         $http({
             method: 'post',
