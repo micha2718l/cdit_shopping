@@ -14,9 +14,15 @@ use Illuminate\Support\Facades\DB;
 */
 
 
+Route::get('/lists', function () {
+    $lists = DB::select('SELECT * FROM `lists`');
+
+    return response()->json($lists);
+});
+
 Route::get('/list/{list_id}', function ($list_id) {
 
-    $list = DB::select('SELECT * FROM `lists` WHERE `list_id` = ?', [$list_id]);
+    $list = DB::select('SELECT * FROM `items` JOIN `lists` ON `items`.`list_id` = `lists`.`list_id` WHERE `items`.`list_id` = ?', [$list_id]);
 
     return response()->json($list);
 });
@@ -27,7 +33,7 @@ Route::post('/additem', function (Request $request) {
     $datetime = date('Y-m-d H:i:s');
 
     if ($list_id) {
-        $query = 'INSERT INTO `lists` (`list_id`, `item`, `created`, `modified`) VALUES (?, ?, ?, ?)';
+        $query = 'INSERT INTO `items` (`list_id`, `item`, `created`, `modified`) VALUES (?, ?, ?, ?)';
         try {
             DB::insert($query, [$list_id, $item, $datetime, $datetime]);
             $status = 'success';
@@ -46,7 +52,7 @@ Route::post('/additem', function (Request $request) {
 Route::delete('/deleteitem', function (Request $request) {
     $id = $request->input('id');
     if ($id) {
-        $query = 'DELETE FROM `lists` WHERE `id` = ?';
+        $query = 'DELETE FROM `items` WHERE `id` = ?';
         try {
             DB::delete($query, [$id]);
             $status = 'success';
@@ -68,7 +74,7 @@ Route::put('/updateitem', function (Request $request) {
     $datetime = date('Y-m-d H:i:s');
 
     if ($id) {
-        $query = 'UPDATE `lists` SET item = ?, modified = ? WHERE `id` = ?';
+        $query = 'UPDATE `items` SET item = ?, modified = ? WHERE `id` = ?';
         try {
             DB::delete($query, [$newItem, $datetime, $id]);
             $status = 'success';
