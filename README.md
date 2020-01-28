@@ -2,11 +2,21 @@
 
 A shopping list app built using Laravel.
 
+# Features
+- View/refresh list
+- add item to list
+- remove item from list
+- update item
+- sort by item name, id number, date created, date modified; fowrard and reverse
+- add new list
+- remove list
+- switch between lists
+
 # Tech used
 - Frameworks
-  - Laravel
-  - Angularjs
-  - Bootstrap
+  - Laravel, api
+  - Angularjs, front end logic
+  - Bootstrap, style
 - Server
   - nginx
   - Amazon EC2
