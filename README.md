@@ -2,6 +2,11 @@
 
 A shopping list app built using Laravel.
 
+# Main files involved
+- [Main html/php for front-end](resources/views/list.php)
+- [Laravel API](routes/api.php)
+- [Front-end javascript](public/js/ang_app.js)
+
 # Features
 - View/refresh list
 - add item to list
@@ -15,7 +20,7 @@ A shopping list app built using Laravel.
 # Tech used
 - Frameworks
   - Laravel, api
-  - Angularjs, front end logic
+  - Angularjs, front-end logic
   - Bootstrap, style
 - Server
   - nginx
